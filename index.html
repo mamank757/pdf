@@ -108,19 +108,17 @@
             body { background: white; padding: 0; margin: 0; }
             .container { box-shadow: none; border: none; width: 100%; padding: 0; max-width: 100%; }
             
-            /* Mengatur agar baris tidak terpotong di tengah (pindah ke hal berikutnya jika tidak cukup) */
             tr { 
                 page-break-inside: avoid !important; 
                 break-inside: avoid !important; 
                 display: table-row !important;
             }
 
-            /* Memastikan header hanya muncul sekali di halaman pertama */
             thead { 
                 display: table-row-group !important; 
             }
 
-            input[type="text"], input[type="date"], select { border: none !important; background: transparent !important; appearance: none; padding-left: 0 !important; }
+            input[type="text"], input[type="date"], select { border: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; padding-left: 0 !important; }
             table { display: table !important; table-layout: fixed !important; width: 100% !important; border-collapse: collapse !important; }
             tbody { display: table-row-group !important; }
             td { display: table-cell !important; border: 1px solid #000 !important; padding: 6px !important; vertical-align: middle !important; }
@@ -132,10 +130,7 @@
 <body>
 
 <div class="visitor-counter-wrapper">
-    <a href='http://www.freevisitorcounters.com'>Counter</a> 
-    <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=a89e5d2c48fde512d9411d388c694afb903a141d'></script>
-    <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1512047/t/1"></script>
-</div>
+    </div>
 
 <div class="container">
     <div class="header">
@@ -152,6 +147,7 @@
             <option>BULAN JULI</option><option>BULAN AGUSTUS</option><option>BULAN SEPTEMBER</option>
             <option>BULAN OKTOBER</option><option>BULAN NOVEMBER</option><option>BULAN DESEMBER</option>
         </select>
+
         <label>NAMA PENYULUH</label> <span>:</span>
          <select id="id_name">
             <option>ABDUL RAHMAN, SP</option>
@@ -177,7 +173,7 @@
         </select>
         
         <label>WILBIN/WKPP</label> <span>:</span>
-        <select id="id_wilayah">
+        <select id="id_wilbin">
             <option>DESA MANURUNG</option>
             <option>DESA MANNAGAE & DESA ASSORAJANG</option>
             <option>DESA ALEWADENG</option>
@@ -187,7 +183,7 @@
             <option>DESA PASELLORENG & KELURAHAN GILIRENG</option>
             <option>DESA BARANGMAMASE</option>
         </select>
-        </div>
+    </div>
 
     <table>
         <thead>
@@ -207,8 +203,8 @@
     </table>
 
     <div class="controls">
-        <button class="btn btn-remove" type="button" onclick="removeRow()">- Hapus Baris Tabel jika hanya 2 konten hari ini </button>
-        <button class="btn btn-add" type="button" onclick="addRow(true)">+ Tambah Baris Tabel jika 4 atau lebih konten hari ini</button>
+        <button class="btn btn-remove" type="button" onclick="removeRow()">- Hapus Baris Terakhir</button>
+        <button class="btn btn-add" type="button" onclick="addRow(true)">+ Tambah Baris Tabel</button>
     </div>
 
     <div class="action-area">
@@ -231,7 +227,7 @@
         try {
             const text = await navigator.clipboard.readText();
             btn.closest('.textarea-container').querySelector('textarea').value = text;
-        } catch (err) { alert('Gagal paste.'); }
+        } catch (err) { alert('Gagal paste. Izinkan akses clipboard.'); }
     }
 
     function clearText(btn) {
@@ -247,10 +243,10 @@
             <td data-label="Tanggal" class="col-date"><input type="date" value="${new Date().toISOString().split('T')[0]}"></td>
             <td data-label="Judul Konten" class="col-konten">
                 <div class="textarea-container">
-                    <textarea placeholder="Tulis atau paste judul konten yang sudah disalin"></textarea>
+                    <textarea placeholder="Paste judul di sini"></textarea>
                     <div class="textarea-actions">
-                        <button type="button" class="btn-action btn-clear" onclick="clearText(this)">🗑️HAPUS SEMUA</button>
-                        <button type="button" class="btn-action btn-paste" onclick="pasteText(this)">📋PASTE JUDUL</button>
+                        <button type="button" class="btn-action btn-clear" onclick="clearText(this)">🗑️</button>
+                        <button type="button" class="btn-action btn-paste" onclick="pasteText(this)">📋 PASTE</button>
                     </div>
                 </div>
             </td>
@@ -294,8 +290,9 @@
     }
 
     function cetakLaporan() {
-        const nama = document.getElementById('id_nama').value || "Laporan";
-        document.title = `LCS_${getTglHariIni()}_${nama}`;
+        const nama = document.getElementById('id_name').value || "Laporan";
+        // Mengubah judul tab agar saat Save as PDF, nama filenya otomatis rapi
+        document.title = `LCS_${getTglHariIni()}_${nama.replace(/\s+/g, '_')}`;
         window.print();
     }
 
@@ -303,8 +300,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-

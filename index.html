@@ -20,14 +20,17 @@
         .header { text-align: center; border-bottom: 2px solid #000; margin-bottom: 15px; padding-bottom: 10px; }
         .header h2, .header h3 { margin: 2px 0; text-transform: uppercase; font-size: 1.1rem; font-weight: bold; }
 
+        /* Perbaikan Struktur Info Section agar Sejajar */
         .info-section { 
             display: grid; 
             grid-template-columns: 200px 20px 1fr; 
             gap: 8px 0; 
             margin-bottom: 20px; 
-            max-width: 700px; 
+            max-width: 800px; 
+            align-items: center;
         }
         .info-section label { font-weight: bold; font-size: 14px; display: flex; align-items: center; }
+        .info-section span { font-weight: bold; text-align: center; }
         
         input[type="text"], input[type="date"], select, textarea { 
             padding: 6px 10px; border: 1px solid #000000; border-radius: 4px; width: 100%; font-family: inherit; font-size: 14px;
@@ -41,11 +44,11 @@
         textarea {
             resize: none;
             display: block;
-            min-height: 180px;
+            min-height: 100px;
             text-align: left;
             word-wrap: break-word;
             white-space: pre-wrap;
-            padding-bottom: 40px !important;
+            overflow: hidden;
         }
 
         .textarea-actions {
@@ -54,6 +57,7 @@
             right: 5px;
             display: flex;
             gap: 5px;
+            z-index: 5;
         }
 
         .btn-action {
@@ -73,21 +77,16 @@
 
         .col-date input[type="date"] { font-size: 12px; text-align: center; }
         
-        /* Penyesuaian khusus Kolom Judul Konten agar Wrap */
         .col-konten { 
             width: 22%; 
             word-wrap: break-word; 
             overflow-wrap: break-word; 
             white-space: normal; 
+            vertical-align: top !important;
         }
         
-       .col-konten select {
-    white-space: normal;
-    height: auto;
-    word-break: break-word;
-    font-size: 11px;   /* memperkecil huruf isi judul */
-    line-height: 1.2;
-}
+        .col-konten select { margin-bottom: 5px; font-size: 11px; }
+
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         th, td { border: 1px solid #000; padding: 6px; text-align: center; vertical-align: middle; }
         th { background: #f2f2f2; font-size: 12px; text-transform: uppercase; font-weight: bold; }
@@ -107,8 +106,7 @@
         .visitor-counter-wrapper { text-align: center; margin-bottom: 10px; font-size: 12px; }
 
         @media screen and (max-width: 768px) {
-            .info-section { grid-template-columns: 1fr; gap: 5px; }
-            .info-section span { display: none; }
+            .info-section { grid-template-columns: 140px 20px 1fr; }
             table, thead, tbody, th, td, tr { display: block; }
             table { table-layout: auto; }
             thead { display: none; }
@@ -136,31 +134,38 @@
         }
 
        @media print {
-            @page { 
-                size: A4; 
-                margin: 1.5cm; 
-            }
-
-            thead th{
+            @page { size: A4; margin: 1.5cm; }
+            thead th {
                 background: #00a651 !important; 
                 color: #000 !important; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            .controls, .action-area, input[type="file"], .textarea-actions, .visitor-counter-wrapper, .footer { display: none !important; }
+            .controls, .action-area, input[type="file"], .textarea-actions, .visitor-counter-wrapper, .footer, .no-print { display: none !important; }
             body { background: white; padding: 0; margin: 0; }
             .container { box-shadow: none; border: none; width: 100%; padding: 0; max-width: 100%; }
-            .info-section { grid-template-columns: 180px 20px 1fr; }
+            
+            /* Menjaga struktur identitas saat print */
+            .info-section { 
+                display: grid !important; 
+                grid-template-columns: 150px 20px 1fr !important; 
+            }
+            
             input, select, textarea { border: none !important; background: transparent !important; padding: 0 !important; appearance: none !important; resize: none !important; }
+            
+            textarea { 
+                overflow: visible !important; 
+                height: auto !important; 
+                font-size: 11px !important;
+                width: 100% !important;
+                display: block !important;
+            }
+
             table { display: table !important; table-layout: fixed !important; width: 100% !important; }
             thead { display: table-row-group !important; } 
             tr { display: table-row !important; border: 1px solid #000 !important; page-break-inside: avoid; }
             td { display: table-cell !important; border: 1px solid #000 !important; }
             .preview-box { border: none !important; width: 120px !important; height: 180px !important; }
-            textarea { padding-bottom: 0 !important; }
-            
-            /* Memastikan teks yang terpilih di select tetap muncul saat print */
-            select { appearance: none; -moz-appearance: none; -webkit-appearance: none; }
         }
     </style>
 </head>
@@ -188,6 +193,7 @@
             <option>BULAN JULI</option><option>BULAN AGUSTUS</option><option>BULAN SEPTEMBER</option>
             <option>BULAN OKTOBER</option><option>BULAN NOVEMBER</option><option>BULAN DESEMBER</option>
         </select>
+
         <label>NAMA PENYULUH</label> <span>:</span> 
             <select id="id_nama">
             <option>ABDUL RAHMAN, SP</option>
@@ -201,7 +207,7 @@
         </select>
         
         <label>NIP.</label> <span>:</span> 
-            <select id="id_nip">
+        <select id="id_nip">
             <option>199009202020121001</option>
             <option>198508162025211004</option>
             <option>196807282014061001</option>
@@ -211,16 +217,17 @@
             <option>197104142014061001</option>
             <option>198203152014062001</option>
         </select>
+
         <label>WILBIN/WKPP</label> <span>:</span> 
-            <select id="id_wilayah">
+        <select id="id_wilayah">
             <option>DESA MANURUNG</option>
-            <option>DESA LEMPONG</option>
-            <option>KELURAHAN SOLO</option>
-            <option>DESA BOLA</option>
-            <option>DESA BALIELO</option>
-            <option>DESA PASIR PUTIH & PATTANGNGAE</option>
-            <option>DESA SANRESENG ADE & DESA LATTIMU</option>
-            <option>DESA UJUNG TANAH & RESA RAJA MAWELLANG</option>
+            <option>DESA MANNAGAE & DESA ASSORAJANG</option>
+            <option>DESA ALEWADENG</option>
+            <option>DESA BOTTOBENTENG & DESA RUMPIA</option>
+            <option>KELURAHAN MAPPADAELO</option>
+            <option>DESA WORONGNGE</option>
+            <option>DESA PASELLORENG & KELURAHAN GILIRENG</option>
+            <option>DESA BARANGMAMASE</option>
         </select>
     </div>
 
@@ -242,8 +249,8 @@
     </table>
 
     <div class="controls">
-        <button class="btn btn-remove" type="button" onclick="removeRow()">- Hapus Baris Tabel jika hanya 2 konten hari ini </button>
-        <button class="btn btn-add" type="button" onclick="addRow(true)">+ Tambah Baris Tabel jika 4 atau lebih konten hari ini</button>
+        <button class="btn btn-remove" type="button" onclick="removeRow()">- Hapus Baris</button>
+        <button class="btn btn-add" type="button" onclick="addRow(true)">+ Tambah Baris</button>
     </div>
 
     <div class="action-area">
@@ -265,19 +272,26 @@
         return `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
     }
 
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
     async function pasteText(btn) {
         try {
             const text = await navigator.clipboard.readText();
             const textarea = btn.closest('.textarea-container').querySelector('textarea');
             textarea.value = text;
+            autoResize(textarea);
         } catch (err) {
-            alert('Gagal menempel teks. Pastikan izin clipboard aktif.');
+            alert('Gagal menempel teks.');
         }
     }
 
     function clearText(btn) {
         const textarea = btn.closest('.textarea-container').querySelector('textarea');
         textarea.value = "";
+        autoResize(textarea);
     }
 
     function addRow(showAlert = false) {
@@ -288,19 +302,15 @@
             <td data-label="Tanggal" class="col-date"><input type="date" value="${new Date().toISOString().split('T')[0]}"></td>
             <td data-label="Judul Konten" class="col-konten">
                 <div class="textarea-container">
-<select>
-<option value="">-- Pilih Judul Konten --</option>
-
-<option>247 (Instagram: kementerianpertanian) Panen Sekali Jalan: Yuk Kenalan dengan Teknologi Combine Harvester</option>
-
-<option>248 (Tiktok: masdarsudaryono) KABAR BAIK BUAT PETANI</option>
-
-<option>249 (Instagram: bppsdmp) Tanam Perdana dilokasi Cetak Sawah Rakyat Kabupaten Gowa</option>
-
-<option>250 (Instagram: a.amran_sulaiman)</option>
-                        
-</select>
-                    <div class="textarea-actions">
+                    <select class="no-print" onchange="const ta=this.nextElementSibling; ta.value=this.value; autoResize(ta);">
+                        <option value="">-- Pilih Judul Konten --</option>
+                        <option value="247 (Instagram: kementerianpertanian) Panen Sekali Jalan: Yuk Kenalan dengan Teknologi Combine Harvester">247 - Combine Harvester</option>
+                        <option value="248 (Tiktok: masdarsudaryono) KABAR BAIK BUAT PETANI">248 - KABAR BAIK</option>
+                        <option value="249 (Instagram: bppsdmp) Tanam Perdana dilokasi Cetak Sawah Rakyat Kabupaten Gowa">249 - Tanam Perdana</option>
+                        <option value="250 (Instagram: a.amran_sulaiman) Kunjungan Kerja Menteri Pertanian">250 - Menteri Pertanian</option>
+                    </select>
+                    <textarea oninput="autoResize(this)" placeholder="Pilih diatas atau ketik manual..."></textarea>
+                    <div class="textarea-actions no-print">
                         <button type="button" class="btn-action btn-clear" onclick="clearText(this)">🗑️</button>
                         <button type="button" class="btn-action btn-paste" onclick="pasteText(this)">📋</button>
                     </div>

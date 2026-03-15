@@ -268,9 +268,18 @@ let cacheJudul = "";
 
 async function loadJudulKonten(){
 
+// CEK CACHE DULU
+if(cacheJudul){
+document.querySelectorAll(".judul-select").forEach(select=>{
+select.innerHTML = cacheJudul;
+});
+return;
+}
+
 // 1. Tambahkan parameter waktu (timestamp) agar data selalu segar
 const timestamp = new Date().getTime();
-const url = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.bppbola.my.id/judul-konten')}?v=${timestamp}`;
+const target = `https://www.bppbola.my.id/judul-konten?v=${timestamp}`;
+const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`;
 
 try {
     // 2. Tambahkan header cache-control agar browser tidak menyimpan data lama
@@ -464,12 +473,11 @@ window.print();
 
 document.addEventListener('DOMContentLoaded',()=>{
 
-addRow();
-addRow();
-addRow();
+await loadJudulKonten();
 
-loadJudulKonten();
-
+addRow();
+addRow();
+addRow();
 });
 
 </script>

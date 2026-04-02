@@ -9,6 +9,38 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>LCS, Tanggal, Nama Penyuluh</title>
     <style>
+    /* 1. Desain Tombol */
+.floating-home {
+    position: fixed;      /* Membuat tombol tetap di posisi layar */
+    top: 20px;         /* Jarak dari bawah */
+    right: 20px;          /* Jarak dari kanan */
+    width: 50px;
+    height: 50px;
+    background-color: #00a651; /* Warna hijau */
+    color: white;
+    border-radius: 50%;   /* Membuat bentuk lingkaran */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 9999;        /* Memastikan di atas elemen lain */
+    transition: 0.3s;
+    font-size: 24px;
+}
+
+/* 2. Efek saat kursor menyentuh tombol */
+.floating-home:hover {
+    transform: scale(1.1);
+    background-color: #008542;
+}
+
+/* 3. Menghilangkan tombol saat Print/PDF */
+@media print {
+    .floating-home {
+        display: none !important;
+    }
+}
         * { box-sizing: border-box; }
         body { font-family: 'Times New Roman', serif; margin: 0; padding: 10px; background: #000000; }
         
@@ -175,6 +207,7 @@ th.col-konten{
 </head>
 
 <body>
+    <a href="https://mamank757.github.io/PPL" class="floating-home" title="Kembali ke Home">🏠</a>
 
 <div class="visitor-counter-wrapper">
     <a href='http://www.freevisitorcounters.com'>Counter</a> 
